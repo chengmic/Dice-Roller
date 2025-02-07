@@ -4,32 +4,45 @@ import Grid2 from '@mui/material/Grid2';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
+const dieColors = {
+  4: 'red',
+  6: 'orange',
+  8: 'yellow',
+  10: 'green',
+  12: 'blue',
+  20: 'purple'
+};
 
 function GenerateNum(min, max) {
   /*max is inclusive*/
   return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1) + min);
 }
 
+function DisplayDie({die}) {
+  return(
+    <Grid2>
+      Die Size: {die.size} <br />
+      Die Value: {die.value}
+    </Grid2>
+  );
+};
+
 function App() {
   const [rolledDice, setRolledDice] = useState([]);
   const [total, setTotal] = useState(0);
-  
-  useEffect (() => {
-    console.log(rolledDice);
-  }, [rolledDice])
 
   const handleDieButtonClick = (dieSize) => {
     const roll = (GenerateNum(1, dieSize));
-    console.log("Roll value: " + roll)
+    console.log("Roll value: " + roll);
 
     /* die json object */
     const die = {
       size: dieSize,
       value: roll
-    }
+    };
 
-    setRolledDice([...rolledDice, die])
-    setTotal (total + die.value);
+    setRolledDice([...rolledDice, die]);
+    setTotal(total + die.value);
   }
 
   return (
@@ -42,7 +55,14 @@ function App() {
         id="DiceTray"
         style = {{backgroundColor: "darkblue"}}
       >
-        This is the Dice Tray.
+        {/* Display individual die when button is clicked */}
+        { rolledDice.map((curDie, i) =>
+          <Button key={i} style={{backgroundColor: dieColors[curDie.size]}}>
+            D{curDie.size}
+            Value: {curDie.value}
+          </Button>
+        )}
+        
       </Grid2>
 
       {/*Total Display*/}
