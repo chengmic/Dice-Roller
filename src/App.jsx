@@ -36,14 +36,15 @@ function App() {
     setTotal(total + die.value);
   };
 
-  /* handler to remove the die from the tray */
   const handleRemoveDie = (die) => {
-    /* create a new array with removed die */
     const newArr = rolledDice.filter((targetDie) => targetDie !== die);
     setRolledDice(newArr);
-    
-    /* set new total */
     setTotal(total - die.value);
+  };
+
+  const handleClearTray = () => {
+    setRolledDice([]);
+    setTotal(0);
   };
   
 
@@ -87,7 +88,12 @@ function App() {
 
       {/* Roll Button */}
       <Grid2>
-        <Button id="RollButton" varient="text" style = {{color: "white", backgroundColor: "red"}}>ROLL!</Button>
+        <Button id="RollButton" variant="text" style = {{color: "white", backgroundColor: "red"}}>ROLL!</Button>
+      </Grid2>
+
+      {/* Clear Button */}
+      <Grid2>
+        <Button onClick={ () => handleClearTray()} variant="text" style = {{color: "black", backgroundColor: "white"}}>Clear</Button>
       </Grid2>
     </div>
   );
