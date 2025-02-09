@@ -21,32 +21,43 @@ function GenerateNum(min, max) {
 function App() {
   const [rolledDice, setRolledDice] = useState([]);
   const [total, setTotal] = useState(0);
-
+  
   const handleSelectButtonClick = (dieSize) => {
     const roll = (GenerateNum(1, dieSize));
     console.log("Roll value: " + roll);
-
+    
     /* die json object */
     const die = {
       size: dieSize,
       value: roll
-    };
+    }
 
     setRolledDice([...rolledDice, die]);
-    setTotal(total + die.value);
-  };
+    calculateTotal([...rolledDice, die]);
+  }
 
   const handleRemoveDie = (die) => {
     const newArr = rolledDice.filter((targetDie) => targetDie !== die);
     setRolledDice(newArr);
-    setTotal(total - die.value);
-  };
+    calculateTotal(newArr);
+  }
 
   const handleClearTray = () => {
     setRolledDice([]);
     setTotal(0);
-  };
-  
+  }
+
+  const calculateTotal = (dice) => {
+    /* iterate through rolledDice and add the value of each die into total*/
+    /* rolledDice = [die, die, die] */
+    let total = 0;
+    for (let i = 0; i < dice.length; i++) {
+      total += dice[i].value;
+    }
+    console.log(total);
+    setTotal(total);
+    
+  }
 
   return (
     <div>
