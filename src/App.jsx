@@ -1,7 +1,7 @@
 import './App.css'
 import Button from '@mui/material/Button';
 import Grid2 from '@mui/material/Grid2';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 const dieColors = {
@@ -14,51 +14,50 @@ const dieColors = {
 };
 
 function GenerateNum(min, max) {
-  /* max is inclusive */
+  // max is inclusive
   return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1) + min);
 }
 
 function App() {
+  // states
   const [rolledDice, setRolledDice] = useState([]);
   const [total, setTotal] = useState(0);
   
-  const handleSelectButtonClick = (dieSize) => {
-    const roll = (GenerateNum(1, dieSize));
-    console.log("Roll value: " + roll);
-    
-    /* die json object */
-    const die = {
-      size: dieSize,
-      value: roll
-    }
-
-    setRolledDice([...rolledDice, die]);
-    calculateTotal([...rolledDice, die]);
-  }
-
-  const handleRemoveDie = (die) => {
-    const newArr = rolledDice.filter((targetDie) => targetDie !== die);
-    setRolledDice(newArr);
-    calculateTotal(newArr);
-  }
-
-  const handleClearTray = () => {
-    setRolledDice([]);
-    setTotal(0);
-  }
-
+  // handlers
   const calculateTotal = (dice) => {
-    /* iterate through rolledDice and add the value of each die into total*/
-    /* rolledDice = [die, die, die] */
     let total = 0;
     for (let i = 0; i < dice.length; i++) {
       total += dice[i].value;
     }
     console.log(total);
     setTotal(total);
-    
   }
 
+  useEffect (() => {
+    calculateTotal(rolledDice);
+  }, [rolledDice]);
+
+  const handleSelectButtonClick = (dieSize) => {
+    const roll = (GenerateNum(1, dieSize));
+    console.log("Roll value: " + roll);
+    
+    // die object
+    const die = {
+      size: dieSize,
+      value: roll
+    }
+    setRolledDice([...rolledDice, die]);
+  }
+
+  const handleRemoveDie = (die) => {
+    const newArr = rolledDice.filter((targetDie) => targetDie !== die);
+    setRolledDice(newArr);
+  }
+
+  const handleClearTray = () => {
+    setRolledDice([]);
+  }
+    
   return (
     <div>
       {/* Dice Tray */}
