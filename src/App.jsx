@@ -57,6 +57,20 @@ function App() {
   const handleClearTray = () => {
     setRolledDice([]);
   }
+
+  const handleRollButtonClick = () => {
+    let newArr = [];
+    for (const die of rolledDice) {
+      let newRoll = GenerateNum(1, die.size)
+      
+      const newDie = {
+        size: die.size,
+        value: newRoll
+      }
+      newArr.push (newDie);
+    }
+    setRolledDice(newArr);
+  }
     
   return (
     <div>
@@ -98,12 +112,12 @@ function App() {
 
       {/* Roll Button */}
       <Grid2>
-        <Button id="RollButton" variant="text" style = {{color: "white", backgroundColor: "red"}}>ROLL!</Button>
+        <Button id="RollButton" onClick= {() => handleRollButtonClick()}variant="text" style = {{color: "white", backgroundColor: "red"}}>ROLL!</Button>
       </Grid2>
 
       {/* Clear Button */}
       <Grid2>
-        <Button onClick={ () => handleClearTray()} variant="text" style = {{color: "black", backgroundColor: "white"}}>Clear</Button>
+        <Button onClick={() => handleClearTray()} variant="text" style = {{color: "black", backgroundColor: "white"}}>Clear</Button>
       </Grid2>
     </div>
   );
