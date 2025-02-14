@@ -45,7 +45,6 @@ function App() {
       // calculate final total with total mod
       let newTotal = Math.max(0, total + totalMod);
       setFinalTotal(newTotal);
-
     }
 
     calculateTotal(rolledDice);
@@ -74,11 +73,7 @@ function App() {
     let newArr = [];
     for (const die of rolledDice) {
       let newRoll = GenerateNum(1, die.size);
-      
-      const newDie = {
-        size: die.size,
-        value: newRoll
-      }
+      const newDie = new Die (die.size, die.mod, newRoll);
       newArr.push (newDie);
     }
     setRolledDice(newArr);
