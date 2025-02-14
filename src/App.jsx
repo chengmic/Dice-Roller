@@ -1,7 +1,7 @@
 import './App.css'
 import { useState, useEffect } from 'react';
 import { Grid2, Button, TextField } from '@mui/material';
-import { mx_bilerp_0 } from 'three/src/nodes/materialx/lib/mx_noise.js';
+
 
 class Die {
   constructor(size, mod=0, naturalValue=0) {
