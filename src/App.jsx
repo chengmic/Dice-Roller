@@ -1,13 +1,14 @@
 import './App.css'
 import { useState, useEffect } from 'react';
 import { Grid2, Button, TextField } from '@mui/material';
+import { mx_bilerp_0 } from 'three/src/nodes/materialx/lib/mx_noise.js';
 
 class Die {
   constructor(size, mod=0, naturalValue=0) {
     this.size = size;
     this.naturalValue = naturalValue;
     this.mod = mod;
-    this.finalValue = this.naturalValue + this.mod;
+    this.finalValue = Math.max(0, this.naturalValue + this.mod);
   }
 }
 
@@ -26,30 +27,31 @@ function GenerateNum(min, max) {
 }
 
 function App() {
-  // states
   const [rolledDice, setRolledDice] = useState([]);
   const [dieMod, setDieMod] = useState(0);
   const [initialTotal, setInitialTotal] = useState(0);
   const [totalMod, setTotalMod] = useState(0);
   const [finalTotal, setFinalTotal] = useState(0);
   
-  // handlers
   useEffect (() => {
     const calculateTotal = (dice) => {
+      // calculate initial roll total
       let total = 0;
       for (let i = 0; i < dice.length; i++) {
         total += dice[i].finalValue;
       }
       setInitialTotal(total);
 
-      // calculate final total
-      let newTotal = total + totalMod
-      setFinalTotal(newTotal)
+      // calculate final total with total mod
+      let newTotal = Math.max(0, total + totalMod);
+      setFinalTotal(newTotal);
+
     }
 
     calculateTotal(rolledDice);
   }, [rolledDice, initialTotal, totalMod]);
 
+  // calculate the roll of individual die
   const handleSelectButtonClick = (dieSize) => {
     const roll = (GenerateNum(1, dieSize));
     console.log("Roll value: " + roll);
@@ -71,7 +73,7 @@ function App() {
   const handleRollButtonClick = () => {
     let newArr = [];
     for (const die of rolledDice) {
-      let newRoll = GenerateNum(1, die.size)
+      let newRoll = GenerateNum(1, die.size);
       
       const newDie = {
         size: die.size,
