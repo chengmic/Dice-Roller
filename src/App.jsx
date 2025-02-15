@@ -1,6 +1,6 @@
 import './App.css'
 import { useState, useEffect } from 'react';
-import { Grid2, Button, TextField } from '@mui/material';
+import { Grid2, Button, TextField} from '@mui/material';
 
 
 class Die {
@@ -27,15 +27,16 @@ function GenerateNum(min, max) {
 }
 
 function App() {
-  const [rolledDice, setRolledDice] = useState([]);
+  const [diceTray, setDiceTray] = useState([]);
   const [dieMod, setDieMod] = useState(0);
   const [initialTotal, setInitialTotal] = useState(0);
   const [totalMod, setTotalMod] = useState(0);
   const [finalTotal, setFinalTotal] = useState(0);
   
+  // calculate totals
   useEffect (() => {
     const calculateTotal = (dice) => {
-      // calculate initial roll total
+      // calculate initial total of all die rolls
       let total = 0;
       for (let i = 0; i < dice.length; i++) {
         total += dice[i].finalValue;
@@ -45,51 +46,50 @@ function App() {
       // calculate final total with total mod
       let newTotal = Math.max(0, total + totalMod);
       setFinalTotal(newTotal);
-    }
+    };
+    calculateTotal(diceTray);
+  }, [diceTray, initialTotal, totalMod]);
 
-    calculateTotal(rolledDice);
-  }, [rolledDice, initialTotal, totalMod]);
-
-  // calculate the roll of individual die
+  // die selection handler
   const handleSelectButtonClick = (dieSize) => {
+    // calculate the roll of individual die
     const roll = (GenerateNum(1, dieSize));
-    console.log("Roll value: " + roll);
     
     // create die object and add to list
     const die = new Die(dieSize, dieMod, roll);
-    setRolledDice([...rolledDice, die]);
+    setDiceTray([...diceTray, die]);
   }
 
+  // remove dice handlers
   const handleRemoveDie = (die) => {
-    const newArr = rolledDice.filter((targetDie) => targetDie !== die);
-    setRolledDice(newArr);
+    const newArr = diceTray.filter((targetDie) => targetDie !== die);
+    setDiceTray(newArr);
   }
-
   const handleClearTray = () => {
-    setRolledDice([]);
+    setDiceTray([]);
   }
 
+  // roll button handler
   const handleRollButtonClick = () => {
     let newArr = [];
-    for (const die of rolledDice) {
+    for (const die of diceTray) {
       let newRoll = GenerateNum(1, die.size);
       const newDie = new Die (die.size, die.mod, newRoll);
       newArr.push (newDie);
     }
-    setRolledDice(newArr);
+    setDiceTray(newArr);
   }
 
-  // handle modifiers
-  const handleChangeDieMod = (e) => {
+  // modifier handlers
+  const handleDieMod = (e) => {
     let mod = e.target.value;
     setDieMod(Number(mod));
   }
-
-  const handleChangeTotalMod = (e) => {
+  const handleTotalMod = (e) => {
     let mod = e.target.value;
     setTotalMod(Number(mod));
   }
-    
+
   return (
     <div>
       {/* Dice Tray */}
@@ -101,7 +101,7 @@ function App() {
         style = {{backgroundColor: "darkblue"}}
       >
         {/* Display individual die when button is clicked */}
-        { rolledDice.map((curDie, i) =>
+        { diceTray.map((curDie, i) =>
           <Button onClick={ () => handleRemoveDie(curDie)} key={i} style={{backgroundColor: dieColors[curDie.size]}}>
             D{curDie.size} <br />
             Mod: {curDie.mod}<br />
@@ -142,12 +142,12 @@ function App() {
 
       {/* Die Mod */}
       <Grid2>
-        <TextField onChange = {handleChangeDieMod} type="number" label="Die Modifier" defaultValue="0" />
+        <TextField onChange = {handleDieMod} type="number" label="Die Modifier" defaultValue="0" />
       </Grid2>
 
       {/* Total Mod */}
       <Grid2>
-        <TextField onChange={handleChangeTotalMod} type="number" label="Total Modifier" value={totalMod} />
+        <TextField onChange={handleTotalMod} type="number" label="Total Modifier" value={totalMod} />
       </Grid2>
     </div>
   );
