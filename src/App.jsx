@@ -96,6 +96,8 @@ function App() {
 
   return (
     <div>
+
+      {/* r3f */}
       <Canvas>
         {/* Lighting */}
         <ambientLight intensity={Math.PI / 2} />
