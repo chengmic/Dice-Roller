@@ -1,6 +1,10 @@
 import './App.css'
 import { useState, useEffect } from 'react';
 import { Grid2, Button, TextField} from '@mui/material';
+import { Canvas } from '@react-three/fiber'
+import { Text } from '@react-three/drei';
+import D4 from './D4';
+import D6 from './D6';
 
 
 class Die {
@@ -92,6 +96,20 @@ function App() {
 
   return (
     <div>
+      <Canvas>
+        {/* Lighting */}
+        <ambientLight intensity={Math.PI / 2} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
+        <pointLight position={[-10, -10, -10]} intensity={Math.PI} />
+
+        {/* Objects */}
+        <D4/>
+        <D6 position={[2, 0, 0]}/>
+        <Text position={[4, -3, 0]}>Total: {finalTotal}</Text>
+      </Canvas>
+
+
+      {/*---------------------------- ORIGINAL IMPLEMENTATION BEFORE R3F -------------------------------*/}
       {/* Dice Tray */}
       <Grid2
         container spacing={2}
