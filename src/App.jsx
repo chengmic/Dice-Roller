@@ -1,8 +1,8 @@
 import './App.css'
 import { useState, useEffect } from 'react';
 import { Grid2, Button, TextField} from '@mui/material';
-import { Canvas } from '@react-three/fiber'
-import { Text, Html } from '@react-three/drei';
+import { Canvas} from '@react-three/fiber'
+import { Text, Billboard, OrthographicCamera } from '@react-three/drei';
 import D4 from './D4';
 import D6 from './D6';
 
@@ -94,23 +94,41 @@ function App() {
     setTotalMod(Number(mod));
   }
 
+
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center'}}>
-      <Canvas style={{ width: '70%', height: '60%' }}>
+      <Canvas style={{ width: '50%', height: '50%' }}>
+        
+        {/* Camera */}
+        <OrthographicCamera
+          makeDefault
+          zoom={1.25}
+          top={10}
+          bottom={-10}
+          left={-20}
+          right={20}
+          near={1}
+          far={100}
+          position={[0, 0, 5]}
+        />
+        
         {/* Background */}
         <color attach="background" args={['darkgray']}/>
 
         {/* Lighting */}
         <ambientLight intensity={Math.PI / 2} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
-        <pointLight position={[-10, -10, -10]} intensity={Math.PI} />
+        <spotLight position={[0, 0, 10]} angle={0.80} penumbra={1} decay={0} intensity={Math.PI} />
+        <pointLight position={[0, 0, -10]} intensity={Math.PI} />
 
         {/* Objects */}
-        <D4/>
-        <D6 position={[2, 0, 0]}/>
+        <D6 position={[-3, 0, 0]}/>
+        <D6 position={[3, 0, 0]}/>
 
         {/* Total Display */}
-        <Text position={[4, -3, 0]}>Total: {finalTotal}</Text>
+        <Billboard>
+          <Text position={[12, -5, 1]}>Total: {finalTotal}</Text>
+        </Billboard>
+        
       </Canvas>
 
       {/*---------------------------- ORIGINAL IMPLEMENTATION BEFORE R3F -------------------------------*/}
