@@ -2,7 +2,7 @@ import './App.css'
 import { useState, useEffect } from 'react';
 import { Grid2, Button, TextField} from '@mui/material';
 import { Canvas } from '@react-three/fiber'
-import { Text } from '@react-three/drei';
+import { Text, Html } from '@react-three/drei';
 import D4 from './D4';
 import D6 from './D6';
 
@@ -95,10 +95,11 @@ function App() {
   }
 
   return (
-    <div>
+    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center'}}>
+      <Canvas style={{ width: '70%', height: '60%' }}>
+        {/* Background */}
+        <color attach="background" args={['darkgray']}/>
 
-      {/* r3f */}
-      <Canvas>
         {/* Lighting */}
         <ambientLight intensity={Math.PI / 2} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
@@ -107,19 +108,14 @@ function App() {
         {/* Objects */}
         <D4/>
         <D6 position={[2, 0, 0]}/>
+
+        {/* Total Display */}
         <Text position={[4, -3, 0]}>Total: {finalTotal}</Text>
       </Canvas>
 
-
       {/*---------------------------- ORIGINAL IMPLEMENTATION BEFORE R3F -------------------------------*/}
       {/* Dice Tray */}
-      <Grid2
-        container spacing={2}
-        alignItems="center"
-        justifyContent="center"
-        id="DiceTray"
-        style = {{backgroundColor: "darkblue"}}
-      >
+      <Grid2 container spacing={2} alignItems="center" justifyContent="center" style = {{backgroundColor: "darkblue"}}>
         {/* Display individual die when button is clicked */}
         { diceTray.map((curDie, i) =>
           <Button onClick={ () => handleRemoveDie(curDie)} key={i} style={{backgroundColor: dieColors[curDie.size]}}>
@@ -129,15 +125,6 @@ function App() {
             Actual Value: {curDie.finalValue} <br />
           </Button>
         )}
-        
-      </Grid2>
-
-      {/* Total Display */}
-      <Grid2
-        id="TotalRoll"
-        style ={{backgroundColor: "gray"}}
-      >
-        Total: {finalTotal}
       </Grid2>
 
       {/* Dice Selection Buttons */}

@@ -20,9 +20,6 @@ function D6(props) {
       onPointerOut={(event) => setHover(false)}>
       <boxGeometry />
       <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-      <Text position={0, 0, 1}>
-        D6
-      </Text>
     </mesh>
   )}
 
