@@ -14,7 +14,6 @@ function D6(props) {
     <mesh
       {...props}
       ref={meshRef}
-      scale={active ? 1.5 : 3}
       onClick={(event) => setActive(!active)}
       onPointerOver={(event) => setHover(true)}
       onPointerOut={(event) => setHover(false)}>

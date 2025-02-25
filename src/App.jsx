@@ -25,6 +25,19 @@ const dieColors = {
   20: 'purple'
 };
 
+const diePositions = {
+  1: [[0, 0, 0]],
+  2: [[-1, 0, 0],[1,0,0]],
+  3: [[-2, 0, 0,], [0, 0, 0,], [2, 0, 0]],
+  4: [[-1, 1, 0], [1, 1, 0], [-1, -1, 0], [1, -1, 0]],
+  5: [[-2, 1, 0], [0, 1, 0], [2, 1, 0], [-1, -1, 0], [1, -1, 0]],
+  6: [[-2, 1, 0], [0, 1, 0], [2, 1, 0], [-2, -1, 0], [0, -1, 0], [2, -1, 0]],
+  7: [[-3, 1, 0], [-1, 1, 0], [1, 1, 0], [3, 1, 0], [-2, -1, 0], [0, -1, 0], [2, -1, 0]],
+  8: [[-3, 1, 0], [-1, 1, 0], [1, 1, 0], [3, 1, 0], [-3, -1, 0], [-1, -1, 0], [1, -1, 0], [3, -1, 0]],
+  9: [[-4, 1, 0], [-2, 1, 0], [0, 1, 0], [2, 1, 0], [4, 1, 0], [-3, -1, 0], [-1, -1, 0], [1, -1, 0], [3, -1, 0]],
+ 10: [[-4, 1, 0], [-2, 1, 0], [0, 1, 0], [2, 1, 0], [4, 1, 0], [-4, -1, 0], [-2, -1, 0], [0, -1, 0], [2, -1, 0], [4, -1, 0]]
+};
+
 function GenerateNum(min, max) {
   // max is inclusive
   return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1) + min);
@@ -56,6 +69,8 @@ function App() {
 
   // die selection handler
   const handleSelectButtonClick = (dieSize) => {
+    if (diceTray.length >= 10) return;
+    
     // calculate the roll of individual die
     const roll = (GenerateNum(1, dieSize));
     
@@ -121,8 +136,9 @@ function App() {
         <pointLight position={[0, 0, -10]} intensity={Math.PI} />
 
         {/* Objects */}
-        <D6 position={[-3, 0, 0]}/>
-        <D6 position={[3, 0, 0]}/>
+        {diceTray.map((element, index, array) => (
+          <D6 position={diePositions[diceTray.length][index]}/>
+        ))}
 
         {/* Total Display */}
         <Billboard>
