@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { Grid2, Button, TextField} from '@mui/material';
 import { Canvas} from '@react-three/fiber'
 import { Text, Billboard, OrthographicCamera } from '@react-three/drei';
-import D4 from './D4';
 import D6 from './D6';
 
 
@@ -27,15 +26,28 @@ const dieColors = {
 
 const diePositions = {
   1: [[0, 0, 0]],
-  2: [[-1, 0, 0],[1,0,0]],
-  3: [[-2, 0, 0,], [0, 0, 0,], [2, 0, 0]],
-  4: [[-1, 1, 0], [1, 1, 0], [-1, -1, 0], [1, -1, 0]],
-  5: [[-2, 1, 0], [0, 1, 0], [2, 1, 0], [-1, -1, 0], [1, -1, 0]],
-  6: [[-2, 1, 0], [0, 1, 0], [2, 1, 0], [-2, -1, 0], [0, -1, 0], [2, -1, 0]],
-  7: [[-3, 1, 0], [-1, 1, 0], [1, 1, 0], [3, 1, 0], [-2, -1, 0], [0, -1, 0], [2, -1, 0]],
-  8: [[-3, 1, 0], [-1, 1, 0], [1, 1, 0], [3, 1, 0], [-3, -1, 0], [-1, -1, 0], [1, -1, 0], [3, -1, 0]],
-  9: [[-4, 1, 0], [-2, 1, 0], [0, 1, 0], [2, 1, 0], [4, 1, 0], [-3, -1, 0], [-1, -1, 0], [1, -1, 0], [3, -1, 0]],
- 10: [[-4, 1, 0], [-2, 1, 0], [0, 1, 0], [2, 1, 0], [4, 1, 0], [-4, -1, 0], [-2, -1, 0], [0, -1, 0], [2, -1, 0], [4, -1, 0]]
+  2: [[-3, 0, 0],[3,0,0]],
+  3: [[-1.5, 1.5, 0,], [1.5, 1.5, 0,], [0, -1.5, 0]],
+  4: [[-1.5, 1.5, 0,], [1.5, 1.5, 0,], [-1.5, -1.5, 0], [1.5, -1.5, 0]],
+  5: [[-3, 1.5, 0], [0, 1.5, 0], [3, 1.5, 0], [-1.5, -1.5, 0], [1.5, -1.5, 0]],
+  6: [[-3, 1.5, 0], [0, 1.5, 0], [3, 1.5, 0], [-3, -1.5, 0], [0, -1.5, 0], [3, -1.5, 0]],
+  7: [[-4.5, 1.5, 0], [-1.5, 1.5, 0], [1.5, 1.5, 0], [4.5, 1.5, 0], [-3, -1.5, 0], [0, -1.5, 0], [3, -1.5, 0]],
+  8: [[-4.5, 1.5, 0], [-1.5, 1.5, 0], [1.5, 1.5, 0], [4.5, 1.5, 0], [-4.5, -1.5, 0], [-1.5, -1.5, 0], [1.5, -1.5, 0], [4.5, -1.5, 0]],
+  9: [[-6, 1.5, 0], [-3, 1.5, 0], [0, 1.5, 0], [3, 1.5, 0], [6, 1.5, 0], [-4.5, -1.5, 0], [-1.5, -1.5, 0], [1.5, -1.5, 0], [4.5, -1.5, 0]],
+ 10: [[-6, 1.5, 0], [-3, 1.5, 0], [0, 1.5, 0], [3, 1.5, 0], [6, 1.5, 0], [-6, -1.5, 0], [-3, -1.5, 0], [0, -1.5, 0], [3, -1.5, 0], [6, -1.5, 0]]
+}; 
+
+const dieScale =  {
+  1: 4,
+  2: 4,
+  3: 2,
+  4: 2,
+  5: 2,
+  6: 2,
+  7: 2,
+  8: 2,
+  9: 2,
+  10: 2
 };
 
 function GenerateNum(min, max) {
@@ -117,14 +129,14 @@ function App() {
         {/* Camera */}
         <OrthographicCamera
           makeDefault
-          zoom={1.25}
+          zoom={2}
           top={10}
           bottom={-10}
           left={-20}
           right={20}
-          near={1}
+          near={-10}
           far={100}
-          position={[0, 0, 5]}
+          position={[0, 0, 12]}
         />
         
         {/* Background */}
@@ -132,17 +144,17 @@ function App() {
 
         {/* Lighting */}
         <ambientLight intensity={Math.PI / 2} />
-        <spotLight position={[0, 0, 10]} angle={0.80} penumbra={1} decay={0} intensity={Math.PI} />
+        <spotLight position={[0, 0, 10]} angle={0.80} penumbra={2} decay={0} intensity={Math.PI} />
         <pointLight position={[0, 0, -10]} intensity={Math.PI} />
 
         {/* Objects */}
         {diceTray.map((element, index, array) => (
-          <D6 position={diePositions[diceTray.length][index]}/>
+          <D6 scale={dieScale[diceTray.length]} position={diePositions[diceTray.length][index]}/>
         ))}
 
         {/* Total Display */}
         <Billboard>
-          <Text position={[12, -5, 1]}>Total: {finalTotal}</Text>
+          <Text position={[7.5, -4.25, 1]}>Total: {finalTotal}</Text>
         </Billboard>
         
       </Canvas>
