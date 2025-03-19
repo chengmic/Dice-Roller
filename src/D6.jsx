@@ -30,13 +30,15 @@ function D6({size, roll, mod, ...props}) {
         {roll + mod}
       </Text>
 
-      {/* Roll + Mod Text */}
-      <Text fontSize={.2}
-       position={[0, -0.65, 5]}
-       anchorX='center'
-      >
-        ({roll} + {mod}) 
-      </Text>
+      {/* Roll + Mod Text (Displays only if mod is not 0) */}
+      {mod !== 0 && (
+        <Text fontSize={.2}
+        position={[0, -0.65, 5]}
+        anchorX='center'
+        >
+          ({roll} + {mod}) 
+        </Text>
+      )}
     </mesh>
   )}
 
