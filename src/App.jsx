@@ -37,18 +37,6 @@ const diePositions = {
  10: [[-6, 1.5, 0], [-3, 1.5, 0], [0, 1.5, 0], [3, 1.5, 0], [6, 1.5, 0], [-6, -1.5, 0], [-3, -1.5, 0], [0, -1.5, 0], [3, -1.5, 0], [6, -1.5, 0]]
 }; 
 
-const dieScale =  {
-  1: 4,
-  2: 4,
-  3: 2,
-  4: 2,
-  5: 2,
-  6: 2,
-  7: 2,
-  8: 2,
-  9: 2,
-  10: 2
-};
 
 function GenerateNum(min, max) {
   // max is inclusive
@@ -149,7 +137,7 @@ function App() {
 
         {/* Objects */}
         {diceTray.map((element, index, array) => (
-          <D6 scale={dieScale[diceTray.length]} position={diePositions[diceTray.length][index]}/>
+          <D6 scale={diceTray.length <=2 ? 4: 2} position={diePositions[diceTray.length][index]}/>
         ))}
 
         {/* Total Display */}
