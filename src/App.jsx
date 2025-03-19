@@ -137,7 +137,13 @@ function App() {
 
         {/* Objects */}
         {diceTray.map((element, index, array) => (
-          <D6 scale={diceTray.length <=2 ? 4: 2} position={diePositions[diceTray.length][index]}/>
+          <D6 
+            scale={diceTray.length <=2 ? 4: 2}
+            position={diePositions[diceTray.length][index]}
+            size={element.size}
+            roll={element.naturalValue}
+            mod={element.mod}
+            />
         ))}
 
         {/* Total Display */}
