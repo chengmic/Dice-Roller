@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Grid2, Button, TextField} from '@mui/material';
 import { Canvas} from '@react-three/fiber'
 import { Text, Billboard, OrthographicCamera } from '@react-three/drei';
-import D6 from './D6';
+import Die3D from './Die3D';
 
 
 class Die {
@@ -137,7 +137,7 @@ function App() {
 
         {/* Objects */}
         {diceTray.map((element, index, array) => (
-          <D6 
+          <Die3D 
             scale={diceTray.length <=2 ? 4: 2}
             position={diePositions[diceTray.length][index]}
             size={element.size}
