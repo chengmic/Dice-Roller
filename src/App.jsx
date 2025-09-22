@@ -7,7 +7,12 @@ import Die3D from './Die3D';
 
 
 class Die {
+  static _nextKey = 0;
+
   constructor(size, mod=0, naturalValue=0) {
+    this._key = Die._nextKey;
+    Die._nextKey ++;
+    
     this.size = size;
     this.naturalValue = naturalValue;
     this.mod = mod;
@@ -67,28 +72,30 @@ function App() {
     calculateTotal(diceTray);
   }, [diceTray, initialTotal, totalMod]);
 
-  // die selection handler
+  // DIE SELECTION HANDLER
   const handleSelectButtonClick = (dieSize) => {
     if (diceTray.length >= 10) return;
     
     // calculate the roll of individual die
     const roll = (GenerateNum(1, dieSize));
-    
+
     // create die object and add to list
     const die = new Die(dieSize, dieMod, roll);
     setDiceTray([...diceTray, die]);
   }
 
-  // remove dice handlers
+  // REMOVE DIE HANDLER
   const handleRemoveDie = (die) => {
     const newArr = diceTray.filter((targetDie) => targetDie !== die);
     setDiceTray(newArr);
   }
+
+  // CLEAR TRAY HANDLER
   const handleClearTray = () => {
     setDiceTray([]);
   }
 
-  // roll button handler
+  // ROLL BUTTON HANDLER
   const handleRollButtonClick = () => {
     let newArr = [];
     for (const die of diceTray) {
@@ -99,7 +106,7 @@ function App() {
     setDiceTray(newArr);
   }
 
-  // modifier handlers
+  // MOD HANDLERS
   const handleDieMod = (e) => {
     let mod = e.target.value;
     setDieMod(Number(mod));
@@ -136,7 +143,7 @@ function App() {
         <pointLight position={[0, 0, -10]} intensity={Math.PI} />
 
         {/* Objects */}
-        {diceTray.map((element, index, array) => (
+        {diceTray.map((element, index) => (
           <Die3D 
             scale={diceTray.length <=2 ? 4: 2}
             position={diePositions[diceTray.length][index]}

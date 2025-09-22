@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { Text } from '@react-three/drei';
-import { orange, red, yellow } from '@mui/material/colors';
-  
+
 
 function Die3D({size, roll, mod, ...props}) {
   // This reference will give us direct access to the mesh
@@ -48,6 +47,7 @@ function Die3D({size, roll, mod, ...props}) {
     }
   };
 
+  // TODO: return scale based on die type
   const getScale = () => {
 
   };
