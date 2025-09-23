@@ -42,14 +42,13 @@ const diePositions = {
  10: [[-6, 1.5, 0], [-3, 1.5, 0], [0, 1.5, 0], [3, 1.5, 0], [6, 1.5, 0], [-6, -1.5, 0], [-3, -1.5, 0], [0, -1.5, 0], [3, -1.5, 0], [6, -1.5, 0]]
 }; 
 
-
 function GenerateNum(min, max) {
   // max is inclusive
   return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1) + min);
 }
 
 function App() {
-  const [diceTray, setDiceTray] = useState([]);
+  const [diceTray, setDiceTray] = useState({});
   const [dieMod, setDieMod] = useState(0);
   const [initialTotal, setInitialTotal] = useState(0);
   const [totalMod, setTotalMod] = useState(0);
@@ -60,8 +59,8 @@ function App() {
     const calculateTotal = (dice) => {
       // calculate initial total of all die rolls
       let total = 0;
-      for (let i = 0; i < dice.length; i++) {
-        total += dice[i].finalValue;
+      for (const key in dice) {
+        total += dice[key].finalValue;
       }
       setInitialTotal(total);
 
@@ -70,40 +69,43 @@ function App() {
       setFinalTotal(newTotal);
     };
     calculateTotal(diceTray);
-  }, [diceTray, initialTotal, totalMod]);
+  }, [diceTray, totalMod]);
 
   // DIE SELECTION HANDLER
   const handleSelectButtonClick = (dieSize) => {
-    if (diceTray.length >= 10) return;
+    if (Object.keys(diceTray).length >= 10) return;
     
     // calculate the roll of individual die
     const roll = (GenerateNum(1, dieSize));
 
     // create die object and add to list
     const die = new Die(dieSize, dieMod, roll);
-    setDiceTray([...diceTray, die]);
+    setDiceTray({...diceTray, [die._key]: die});
   }
 
   // REMOVE DIE HANDLER
   const handleRemoveDie = (die) => {
-    const newArr = diceTray.filter((targetDie) => targetDie !== die);
-    setDiceTray(newArr);
+    const newHash = { ...diceTray};
+    delete newHash[die._key];
+    setDiceTray(newHash);
   }
 
   // CLEAR TRAY HANDLER
   const handleClearTray = () => {
-    setDiceTray([]);
+    setDiceTray({});
   }
 
   // ROLL BUTTON HANDLER
   const handleRollButtonClick = () => {
-    let newArr = [];
-    for (const die of diceTray) {
-      let newRoll = GenerateNum(1, die.size);
-      const newDie = new Die (die.size, die.mod, newRoll);
-      newArr.push (newDie);
+    let newHash = {};
+
+    for (const key in diceTray) {
+      const oldDie = diceTray[key];
+      const newRoll = GenerateNum(1, oldDie.size)
+      const newDie = new Die(oldDie.size, oldDie.mod, newRoll)
+      newHash[key] = newDie;
     }
-    setDiceTray(newArr);
+  setDiceTray(newHash)
   }
 
   // MOD HANDLERS
@@ -116,9 +118,10 @@ function App() {
     setTotalMod(Number(mod));
   }
 
-
+  // ---------------------------- RENDER / JSX -------------------------- 
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center'}}>
+      
       <Canvas style={{ width: '50%', height: '50%' }}>
         
         {/* Camera */}
@@ -143,10 +146,10 @@ function App() {
         <pointLight position={[0, 0, -10]} intensity={Math.PI} />
 
         {/* Objects */}
-        {diceTray.map((element, index) => (
+        {Object.values(diceTray).map((element, index) => (
           <Die3D 
-            scale={diceTray.length <=2 ? 4: 2}
-            position={diePositions[diceTray.length][index]}
+            scale={Object.keys(diceTray).length <=2 ? 4: 2}
+            position={diePositions[Object.keys(diceTray).length][index]}
             size={element.size}
             roll={element.naturalValue}
             mod={element.mod}
@@ -163,15 +166,18 @@ function App() {
       {/*---------------------------- ORIGINAL IMPLEMENTATION BEFORE R3F -------------------------------*/}
       {/* Dice Tray */}
       <Grid2 container spacing={2} alignItems="center" justifyContent="center" style = {{backgroundColor: "darkblue"}}>
+        
         {/* Display individual die when button is clicked */}
-        { diceTray.map((curDie, i) =>
-          <Button onClick={ () => handleRemoveDie(curDie)} key={i} style={{backgroundColor: dieColors[curDie.size]}}>
-            D{curDie.size} <br />
-            Mod: {curDie.mod}<br />
-            Natural Value: {curDie.naturalValue}<br />
-            Actual Value: {curDie.finalValue} <br />
+        {
+        Object.values(diceTray).map((element, i) => (
+          <Button onClick= {() => handleRemoveDie(element)} key={element._key} style={{backgroundColor: dieColors[element.size]}}>
+            D{element.size} <br />
+            Mod: {element.mod}<br />
+            Natural Value: {element.naturalValue}<br />
+            Actual Value: {element.finalValue} <br />
           </Button>
-        )}
+        ))
+        }
       </Grid2>
 
       {/* Dice Selection Buttons */}
@@ -186,22 +192,22 @@ function App() {
 
       {/* Roll Button */}
       <Grid2>
-        <Button id="RollButton" onClick= {() => handleRollButtonClick()}variant="text" style = {{color: "white", backgroundColor: "red"}}>ROLL!</Button>
+        <Button onClick= { () => handleRollButtonClick()} id="RollButton" variant="text" style = {{color: "white", backgroundColor: "red"}}>ROLL!</Button>
       </Grid2>
 
       {/* Clear Button */}
       <Grid2>
-        <Button onClick={() => handleClearTray()} variant="text" style = {{color: "black", backgroundColor: "white"}}>Clear</Button>
+        <Button onClick = { () => handleClearTray()} variant="text" style = {{color: "black", backgroundColor: "white"}}>Clear</Button>
       </Grid2>
 
-      {/* Die Mod */}
+      {/* Die Mod*/}
       <Grid2>
-        <TextField onChange = {handleDieMod} type="number" label="Die Modifier" defaultValue="0" />
+        <TextField onChange = { (e) => handleDieMod(e) } type="number" label="Die Modifier" defaultValue="0" />
       </Grid2>
 
-      {/* Total Mod */}
+      {/* Total Mod on change */}
       <Grid2>
-        <TextField onChange={handleTotalMod} type="number" label="Total Modifier" value={totalMod} />
+        <TextField onChange = { (e) => handleTotalMod(e) } type="number" label="Total Modifier" value={totalMod} />
       </Grid2>
     </div>
   );
