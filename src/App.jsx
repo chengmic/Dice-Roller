@@ -2,7 +2,7 @@ import './App.css'
 import { useState, useEffect } from 'react';
 import { Grid2, Button, TextField} from '@mui/material';
 import { Canvas} from '@react-three/fiber'
-import { Text, Billboard, OrthographicCamera } from '@react-three/drei';
+import { Text, Billboard, OrthographicCamera, MeshReflectorMaterial } from '@react-three/drei';
 import Die3D from './Die3D';
 
   const handleContextMenu = (event) => {
@@ -22,15 +22,6 @@ class Die {
     this.finalValue = Math.max(0, this.naturalValue + this.mod);
   }
 }
-
-const dieColors = {
-  4: 'red',
-  6: 'orange',
-  8: 'yellow',
-  10: 'green',
-  12: 'blue',
-  20: 'purple'
-};
 
 const diePositions = {
   1: [[0, 0, 0]],
@@ -127,7 +118,7 @@ function App() {
       
       <Canvas style={{ width: '50%', height: '50%' }}>
         onContextMenu={handleContextMenu}
-        
+
         {/* Camera */}
         <OrthographicCamera
           makeDefault
@@ -154,11 +145,11 @@ function App() {
           <Die3D 
             onClick = {() => handleRemoveDie(element)}
             key={element._key}
-            scale={Object.keys(diceTray).length <=2 ? 4: 2}
             position={diePositions[Object.keys(diceTray).length][index]}
             size={element.size}
             roll={element.naturalValue}
             mod={element.mod}
+            traySize={Object.keys(diceTray).length}
             />
         ))}
 

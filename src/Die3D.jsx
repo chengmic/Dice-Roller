@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Text } from '@react-three/drei';
 
 
-function Die3D({size, roll, mod, onClick, ...props}) {
+function Die3D({size, roll, mod, onClick, traySize, ...props}) {
   // This reference will give us direct access to the mesh
   const meshRef = useRef()
   // Set up state for the hovered and active state
@@ -46,12 +46,32 @@ function Die3D({size, roll, mod, onClick, ...props}) {
     }
   };
 
-  // TODO: return scale based on die type
   const getScale = () => {
-
+    switch (size) {
+      case 4:
+        return 2.6;
+      case 6:
+        return 3;
+      case 8:
+        return 2.1;
+      case 10:
+        return 2;
+      case 12:
+        return 1.8;
+      case 20:
+        return 1.8;
+      default:
+        return 1;
+    }
   };
 
+  const getFinalScale = () => {
+    let FinalScale = traySize <= 2 ? getScale() : getScale() / 1.5;
+    return FinalScale;
+  }
+
   const meshColor = getColor()
+  const dieScale = getScale()
 
   // Return view, these are regular three.js elements expressed in JSX
   return (
@@ -59,16 +79,20 @@ function Die3D({size, roll, mod, onClick, ...props}) {
       {...props}
       ref={meshRef}
 
+      // scale
+      scale = {getFinalScale()}
+
       // Remove die from diceTray
       onClick={onClick}
       onPointerOver={(event) => setHover(true)}
       onPointerOut={(event) => setHover(false)}
     >
+
       {/* Call shape */}
       {getGeometry()}
 
       {/*Get mesh -- set color and scale based on shape*/}
-      <meshStandardMaterial color={hovered ? 'hotpink' : meshColor} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : meshColor}/>
       
       {/* Total Die Value Text */}
       <Text fontSize={.4} position={[0, 0, 5]}>
