@@ -2,7 +2,7 @@ import './App.css'
 import { useState, useEffect } from 'react';
 import { Grid2, Button, TextField} from '@mui/material';
 import { Canvas} from '@react-three/fiber'
-import { Text, Billboard, OrthographicCamera, MeshReflectorMaterial } from '@react-three/drei';
+import { Text, Billboard, OrthographicCamera } from '@react-three/drei';
 import Die3D from './Die3D';
 
   const handleContextMenu = (event) => {

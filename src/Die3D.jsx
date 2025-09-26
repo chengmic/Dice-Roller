@@ -5,7 +5,7 @@ import { Text } from '@react-three/drei';
 function Die3D({size, roll, mod, onClick, traySize, ...props}) {
   // This reference will give us direct access to the mesh
   const meshRef = useRef()
-  // Set up state for the hovered and active state
+
   const [hovered, setHover] = useState(false)
 
   const getGeometry = () => {
@@ -76,6 +76,9 @@ function Die3D({size, roll, mod, onClick, traySize, ...props}) {
   };
 
   const meshColor = getColor()
+  const finalScale = getFinalScale()
+  const textScale = getTextScale()
+
 
   // Return view, these are regular three.js elements expressed in JSX
   return (
@@ -85,7 +88,7 @@ function Die3D({size, roll, mod, onClick, traySize, ...props}) {
         ref={meshRef}
 
         // scale
-        scale = {getFinalScale()}
+        scale = {finalScale}
 
         // Remove die from diceTray
         onClick={onClick}
@@ -103,7 +106,7 @@ function Die3D({size, roll, mod, onClick, traySize, ...props}) {
       {/* TEXT */}
       <group
       position = {props.position}
-      scale = {getTextScale()}
+      scale = {textScale}
       >
 
         {/* Total Die Value Text */}
