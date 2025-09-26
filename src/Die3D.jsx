@@ -2,12 +2,11 @@ import { useState, useRef } from 'react';
 import { Text } from '@react-three/drei';
 
 
-function Die3D({size, roll, mod, ...props}) {
+function Die3D({size, roll, mod, onClick, ...props}) {
   // This reference will give us direct access to the mesh
   const meshRef = useRef()
   // Set up state for the hovered and active state
   const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
 
   const getGeometry = () => {
     switch (size) {
@@ -61,7 +60,7 @@ function Die3D({size, roll, mod, ...props}) {
       ref={meshRef}
 
       // TODO: onClick remove die from diceTray
-      onClick={(event) => setActive(!active)}
+      onClick={onClick}
       onPointerOver={(event) => setHover(true)}
       onPointerOut={(event) => setHover(false)}
     >

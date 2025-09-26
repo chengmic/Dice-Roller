@@ -148,6 +148,8 @@ function App() {
         {/* Objects */}
         {Object.values(diceTray).map((element, index) => (
           <Die3D 
+            onClick = {() => handleRemoveDie(element)}
+            key={element._key}
             scale={Object.keys(diceTray).length <=2 ? 4: 2}
             position={diePositions[Object.keys(diceTray).length][index]}
             size={element.size}
@@ -164,22 +166,6 @@ function App() {
       </Canvas>
 
       {/*---------------------------- ORIGINAL IMPLEMENTATION BEFORE R3F -------------------------------*/}
-      {/* Dice Tray */}
-      <Grid2 container spacing={2} alignItems="center" justifyContent="center" style = {{backgroundColor: "darkblue"}}>
-        
-        {/* Display individual die when button is clicked */}
-        {
-        Object.values(diceTray).map((element, i) => (
-          <Button onClick= {() => handleRemoveDie(element)} key={element._key} style={{backgroundColor: dieColors[element.size]}}>
-            D{element.size} <br />
-            Mod: {element.mod}<br />
-            Natural Value: {element.naturalValue}<br />
-            Actual Value: {element.finalValue} <br />
-          </Button>
-        ))
-        }
-      </Grid2>
-
       {/* Dice Selection Buttons */}
       <Grid2>
           <Button onClick={ () => handleSelectButtonClick(4)} variant="text">D4</Button>
