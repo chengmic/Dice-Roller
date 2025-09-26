@@ -49,17 +49,17 @@ function Die3D({size, roll, mod, onClick, traySize, ...props}) {
   const getScale = () => {
     switch (size) {
       case 4:
-        return 2.6;
+        return 2.4;
       case 6:
-        return 3;
+        return 2.6;
       case 8:
-        return 2.1;
+        return 1.6;
       case 10:
-        return 2;
+        return 1.6;
       case 12:
-        return 1.8;
+        return 1.6;
       case 20:
-        return 1.8;
+        return 1.6;
       default:
         return 1;
     }
@@ -68,44 +68,57 @@ function Die3D({size, roll, mod, onClick, traySize, ...props}) {
   const getFinalScale = () => {
     let FinalScale = traySize <= 2 ? getScale() : getScale() / 1.5;
     return FinalScale;
-  }
+  };
+
+  const getTextScale = () => {
+    let textScale = traySize <= 2 ? 4 : 2;
+    return textScale;
+  };
 
   const meshColor = getColor()
-  const dieScale = getScale()
 
   // Return view, these are regular three.js elements expressed in JSX
   return (
-    <mesh
-      {...props}
-      ref={meshRef}
+    <>
+      <mesh
+        {...props}
+        ref={meshRef}
 
-      // scale
-      scale = {getFinalScale()}
+        // scale
+        scale = {getFinalScale()}
 
-      // Remove die from diceTray
-      onClick={onClick}
-      onPointerOver={(event) => setHover(true)}
-      onPointerOut={(event) => setHover(false)}
-    >
+        // Remove die from diceTray
+        onClick={onClick}
+        onPointerOver={(event) => setHover(true)}
+        onPointerOut={(event) => setHover(false)}
+      >
 
-      {/* Call shape */}
-      {getGeometry()}
+        {/* Call shape */}
+        {getGeometry()}
 
-      {/*Get mesh -- set color and scale based on shape*/}
-      <meshStandardMaterial color={hovered ? 'hotpink' : meshColor}/>
+        {/*Get mesh -- set color and scale based on shape*/}
+        <meshStandardMaterial color={hovered ? 'hotpink' : meshColor}/>
+      </mesh>
       
-      {/* Total Die Value Text */}
-      <Text fontSize={.4} position={[0, 0, 5]}>
-        {roll + mod}
-      </Text>
+      {/* TEXT */}
+      <group
+      position = {props.position}
+      scale = {getTextScale()}
+      >
 
-      {/* Roll + Mod Text (Displays only if mod is not 0) */}
-      {mod !== 0 && (
-        <Text fontSize={.2} position={[0, -0.65, 5]} anchorX='center'>
-          ({roll} + {mod}) 
+        {/* Total Die Value Text */}
+        <Text fontSize={.4} position={[0, 0, 5]}>
+          {roll + mod}
         </Text>
-      )}
-    </mesh>
+
+        {/* Roll + Mod Text (Displays only if mod is not 0) */}
+        {mod !== 0 && (
+          <Text fontSize={.2} position={[0, -0.65, 5]} anchorX='center'>
+            ({roll} + {mod}) 
+          </Text>
+        )}
+      </group>
+      </>
   )}
 
 export default Die3D;
