@@ -5,6 +5,9 @@ import { Canvas} from '@react-three/fiber'
 import { Text, Billboard, OrthographicCamera } from '@react-three/drei';
 import Die3D from './Die3D';
 
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+  };
 
 class Die {
   static _nextKey = 0;
@@ -123,6 +126,7 @@ function App() {
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center'}}>
       
       <Canvas style={{ width: '50%', height: '50%' }}>
+        onContextMenu={handleContextMenu}
         
         {/* Camera */}
         <OrthographicCamera

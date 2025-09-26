@@ -59,7 +59,7 @@ function Die3D({size, roll, mod, onClick, ...props}) {
       {...props}
       ref={meshRef}
 
-      // TODO: onClick remove die from diceTray
+      // Remove die from diceTray
       onClick={onClick}
       onPointerOver={(event) => setHover(true)}
       onPointerOut={(event) => setHover(false)}
